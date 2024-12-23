@@ -16,27 +16,28 @@ from nltk.translate.bleu_score import corpus_bleu
 
 from transformers import GPT2TokenizerFast, ViTImageProcessor, VisionEncoderDecoderModel
 from torch.utils.data import Dataset
-
+from transformers import GPT2TokenizerFast, ViTImageProcessor, VisionEncoderDecoderModel
+from nltk.translate.bleu_score import corpus_bleu, sentence_bleu
+from googletrans import Translator
+from PIL import Image
+import numpy as np
+import pandas as pd
 import wget
 import requests
 import torch
 import numpy as np
 from PIL import Image
 import pickle
-# from torchvision import transforms
-# from datasets import load_dataset
-# import torch.nn as nn
 from googletrans import Translator
-
 import matplotlib.pyplot as plt
 from nltk.translate.bleu_score import sentence_bleu
 from nltk.translate.bleu_score import corpus_bleu
 import json
-
 import os
 from tqdm import tqdm
 import pandas as pd
 import warnings
+import csv
 warnings.filterwarnings('ignore')
 
 from google.colab import drive
@@ -55,9 +56,6 @@ data.head()
 
 data['caption_id']=data['caption_id'].str[:-2]
 data.head()
-
-# Transformer for image to english caption generator
-# Initialize the model with the same architecture as before
 
 model_raw = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
 
@@ -107,8 +105,6 @@ for i, image in enumerate(data['caption_id']):
             translated_sentences.append(translated_sentence)
             reference_captions.append(reference_caption)
 
-import csv
-
 # Define the file path for the CSV file
 csv_file_path = "final_500.csv"
 
@@ -138,13 +134,6 @@ bleu_score = corpus_bleu(references, predictions)
 print("BLEU Score:", bleu_score)
 
 """Since this approach kept yielding insignificant results, we chose another approach as shown in the next cell for evaluation."""
-
-from transformers import GPT2TokenizerFast, ViTImageProcessor, VisionEncoderDecoderModel
-from nltk.translate.bleu_score import corpus_bleu, sentence_bleu
-from googletrans import Translator
-from PIL import Image
-import numpy as np
-import pandas as pd
 
 # Load the data
 data = pd.read_csv("BAN-Cap_captiondata.csv")
